@@ -9,18 +9,38 @@
 print("=== Task 3: Temperature Converter ===")
 print("Enter temperature in Celsius (must be between -273.15°C and 5500°C)\n")
 
-def convert_temperature(prompt):
-    #
-    # Write your code here.
-    # Define TemperatureError class
-    # Convert input to float
-    # Validate temperature range
-    # Calculate Fahrenheit: (celsius * 9/5) + 32
-    # Handle exceptions and keep prompting
-    #
+
+class TemperatureError(Exception):   #our custom exception
+    """Custom exception for invalid temperature ranges."""
     pass
 
-celsius = convert_temperature("Enter temperature in Celsius: ")
-fahrenheit = (float(celsius) * 9/5) + 32
-print(f"{celsius}°C = {fahrenheit}°F")
-print()
+def convert_temperature(prompt):
+    while True:
+        try:
+            value = input(prompt).strip()
+            
+            if not value:            # Check for empty input
+                raise ValueError("Error: invalid temperature")
+            
+            celsius = float(value)   # converting to float
+            
+            
+            if celsius < -273.15:    # Validate range
+                raise TemperatureError("Error: temperature cannot be below absolute zero (-273.15°C)")
+            if celsius > 5500:
+                raise TemperatureError("Error: temperature cannot be above the surface of the sun (5500°C)")
+            
+            return celsius
+        
+        except ValueError as e:
+            print(e)
+        except TemperatureError as e:
+            print(e)
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+
+# Using our function
+celsius = convert_temperature("Enter your temperature in Celsius: ")
+fahrenheit = (celsius * 9/5) + 32
+print(f"{celsius}°C = {fahrenheit}°F\n")
+
